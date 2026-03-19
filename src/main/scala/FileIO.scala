@@ -1,12 +1,18 @@
+import Subscription.Subscription
 import scala.io.Source
 
 object FileIO {
   // Pure function to read subscriptions from a JSON file
-  def readSubscriptions(): List[String] = {
-    List(
-      "https://www.reddit.com/r/scala/.json?count=10",
-      "https://www.reddit.com/r/learnprogramming/.json?count=10"
-    )
+  def readSubscriptions(): List[Subscription] = {
+
+
+    val source = Source.fromFile("subscriptions.json","UTF-8")
+    try{
+
+      //Do something
+    }finally{
+      source.close()
+    }
   }
 
   // Pure function to download JSON feed from a URL
@@ -15,3 +21,4 @@ object FileIO {
     source.mkString
   }
 }
+//List[Subscription] = ["{"name":"asjkdhasd","url":"akjshdkjasd"}"];
