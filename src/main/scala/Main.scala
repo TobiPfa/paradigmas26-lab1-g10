@@ -7,18 +7,16 @@ object Main {
 
     val subscriptions: List[Subscription] = FileIO.readSubscriptions("subscriptions.json")
     
-    val allPosts: List[(String, String)] = subscriptions.map { subscription =>
-      val (subredditName, url) = subscription
+    val allPosts: List[Post] = subscriptions.flatMap { case (subredditName, url) =>
       println(s"Fetching posts from: $subredditName")
-      val posts = FileIO.downloadFeed(url)
-      (subredditName, posts)
+      val json = FileIO.downloadFeed(url)
+      FileIO.parsePosts(subredditName, json)
     }
-        
+    
     val output = allPosts
-      .map { case (url, posts) => Formatters.formatSubscription(url, posts) }
-      .mkString("\n")
+      .map { post => Formatters.formatPost(post) }
+      .mkString("\n---------------------------------------------------------------------\n")
 
     println(output)
-    
   }
 }
