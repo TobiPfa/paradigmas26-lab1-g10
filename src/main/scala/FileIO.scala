@@ -2,7 +2,6 @@ import scala.io.Source
 import org.json4s._
 import org.json4s.jackson.JsonMethods._
 import scala.util.Using
-import TextProcessing._
 
 import Subscription.Subscription
 import Post.Post
@@ -13,8 +12,8 @@ object FileIO {
 
   // Pure function to read subscriptions from a JSON file
   def readSubscriptions(subscriptionsFile: String): List[Subscription] = {
-    val content = Using(Source.fromFile(subscriptionsFile)) { source =>
-      source.mkString
+    val content = Using(Source.fromFile(subscriptionsFile)) {
+      source => source.mkString
     }.get
 
     // parse the json file and convert its content into a list of hashmaps
@@ -28,7 +27,7 @@ object FileIO {
   }
   
   // Pure function to parse post of a subreddit
-  def parsePosts(subredditName: String, posts: String): List[Post] = {
+    def parsePosts(subredditName: String, posts: String): List[Post] = {
     val json = parse(posts)
     val children = (json \ "data" \ "children").children
 
@@ -51,7 +50,16 @@ object FileIO {
 
   // Pure function to download JSON feed from a URL
   def downloadFeed(url: String): String = {
-    val source = Source.fromURL(url)
-    source.mkString
+    try{
+      val source = Option(Source.fromURL(url))
+      source match {
+        case Some(b) => b.mkString //In case it returns a value, parse it
+        case None => "" //In case for some reason it doesn't, return empty string
+      }
+    }catch{
+      case e: Exception =>
+        println(s"Failed to fetch $url: ${e.getMessage}")
+        ""//In case there's an exception, print it return empty string.
+    }
   }
 }
