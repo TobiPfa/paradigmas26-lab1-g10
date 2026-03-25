@@ -12,7 +12,9 @@ object FileIO {
 
   // Pure function to read subscriptions from a JSON file
   def readSubscriptions(subscriptionsFile: String): List[Subscription] = {
-    val content = Using(Source.fromFile(subscriptionsFile)) {
+
+    try{
+     val content = Using(Source.fromFile(subscriptionsFile)) {
       source => source.mkString
     }.get
 
@@ -23,6 +25,11 @@ object FileIO {
     // map it to a List[Subscription]
     jsonMap.map { sub =>
       (sub("name"), sub("url"))
+    }
+    }catch{
+      case e : Exception =>
+        println(s"Error reading subscriptions from ${subscriptionsFile}: ${e.getMessage}")
+        [("")]
     }
   }
   
