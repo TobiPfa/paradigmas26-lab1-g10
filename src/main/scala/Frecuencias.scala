@@ -1,9 +1,7 @@
 import Post.Post
 
-object Frecuencia {
-
-  def frecuenciaPalabras(posts: List[Post]): Map[String, Int] = {
-
+object Frequencies {
+  def wordFrequency(posts: List[Post]): Map[String, Int] = {
     val stopwords = Set( 
 "the", "about", "above", "after", "again", "against", "all", "am", "an",
 "and", "any", "are", "aren't", "as", "at", "be", "because", "been",
@@ -29,10 +27,16 @@ object Frecuencia {
  posts
     .map(p => p._3)
     .flatMap(text => text.split("\\s+"))
+    .map(cleanWord) // clean words with trash
+    .filter(_.nonEmpty)
     .filter(word => word.length > 0 && word(0).isUpper)
     .filter(word => !stopwords.contains(word.toLowerCase))
     .groupBy(word => word)
     .mapValues(_.size)
     .toMap
    }
+  
+  def cleanWord(word: String): String = {
+    word.replaceAll("[^a-zA-ZáéíóúÁÉÍÓÚñÑ]", "")  // removes everything that isnt a letter
+  }
 }
