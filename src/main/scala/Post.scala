@@ -1,3 +1,3 @@
 object Post {
-    type Post = (String, String, String, String) // (subreddit, title, selftext, formattedDate)
+    type Post = (String, String, Int, String, String, String) // (subreddit, title, score, selftext, date, url)
 }

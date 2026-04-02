@@ -3,8 +3,8 @@ import Post.Post
 object Formatters {
   // Pure function to format posts
   def formatPost(post: Post): String = { 
-    val (subreddit, title, selftext, formattedDate) = post
-    s"Subreddit: $subreddit\nTile: $title\nDate: $formattedDate\nText:\n$selftext"
+    val (subreddit, title, score, selftext, formattedDate, url) = post
+    s"Subreddit: $subreddit\nTile: $title\nScore: $score\nDate: $formattedDate\n$url\nText:\n$selftext"
   }
 
   // Pure function to format posts from a subscription

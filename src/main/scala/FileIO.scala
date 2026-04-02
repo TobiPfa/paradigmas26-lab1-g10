@@ -29,7 +29,7 @@ object FileIO {
     }catch{
       case e : Exception =>
         println(s"Error reading subscriptions from ${subscriptionsFile}: ${e.getMessage}")
-        List.empty  // or List() or Nil
+        List.empty
     }
   }
   
@@ -38,20 +38,23 @@ object FileIO {
     val json = parse(posts)
     val children = (json \ "data" \ "children").children
 
-    // Filtrar posts vacios (titulo o cuerpo solo con espacios o vacio)
+    // Filter empty posts (title or body with spaces or empty characters only)
     children.filter{ child => 
       val data       = child \ "data"
       val title      = (data \ "title").extract[String]
       val selftext   = (data \ "selftext").extract[String]
       title.trim.nonEmpty && selftext.trim.nonEmpty
     }
+
     .map { child =>
       val data       = child \ "data"
       val title      = (data \ "title").extract[String]
       val selftext   = (data \ "selftext").extract[String]
+      val score   = (data \ "score").extract[Integer]
       val createdUtc = (data \ "created_utc").extract[Double].toLong
       val formattedDate = TextProcessing.formatDateFromUTC(createdUtc)
-      (subredditName, title, selftext, formattedDate)
+      val url = (data \ "url").extract[String]
+      (subredditName, title, score, selftext, formattedDate,url)
     }
   }
 
