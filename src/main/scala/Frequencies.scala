@@ -2,7 +2,7 @@ import Post.Post
 
 object Frequencies {
   def wordFrequency(posts: List[Post]): Map[String, Int] = {
-    val stopwords = Set( 
+    val stopwords = Set(
 "the", "about", "above", "after", "again", "against", "all", "am", "an",
 "and", "any", "are", "aren't", "as", "at", "be", "because", "been",
 "before", "being", "below", "between", "both", "but", "by", "can't",
@@ -21,13 +21,13 @@ object Frequencies {
 "through", "to", "too", "under", "until", "up", "very", "was", "wasn't",
 "we", "we'd", "we'll", "we're", "we've", "were", "weren't", "what",
 "what's", "when", "when's", "where", "where's", "which", "while", "who",
-"who's", "whom", "why", "why's", "with", "won't", "would", "wouldn't", "you", 
+"who's", "whom", "why", "why's", "with", "won't", "would", "wouldn't", "you",
 "you'd", "you'll", "you're", "you've", "your", "yours", "yourself", "yourselves"
 )
  posts
     .map(p => p._3)
     .flatMap(text => text.split("\\s+"))
-    .map(cleanWord) // clean words with trash
+    .map(cleanWord(_)) // clean words with trash
     .filter(_.nonEmpty)
     .filter(word => word.length > 0 && word(0).isUpper)
     .filter(word => !stopwords.contains(word.toLowerCase))
@@ -35,7 +35,7 @@ object Frequencies {
     .mapValues(_.size)
     .toMap
    }
-  
+
   def cleanWord(word: String): String = {
     word.replaceAll("[^a-zA-ZáéíóúÁÉÍÓÚñÑ]", "")  // removes everything that isnt a letter
   }
