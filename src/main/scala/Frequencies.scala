@@ -25,7 +25,7 @@ object Frequencies {
 "you'd", "you'll", "you're", "you've", "your", "yours", "yourself", "yourselves"
 )
  posts
-    .map(p => p._3)
+    .map(p => p._4)
     .flatMap(text => text.split("\\s+"))
     .map(cleanWord(_)) // clean words with trash
     .filter(_.nonEmpty)
