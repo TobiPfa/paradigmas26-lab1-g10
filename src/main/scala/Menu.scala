@@ -29,13 +29,13 @@ object Menu {
     def leerLinea(tipo: Option[String]): Option[Int] = {
         tipo match {
             case Some("post") =>
-            print("Elegí un post: ")
+            print("Elige un post: ")
 
             case Some("sub") =>
-            print("Elegí una suscripción: ")
+            print("Elige una suscripción: ")
 
             case _ =>
-            println("Ingresá un número")
+            print("Elige una opcion: ")
         }
 
         readLine().toIntOption
