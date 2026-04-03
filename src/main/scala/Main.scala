@@ -1,5 +1,6 @@
 import Subscription.Subscription
 import Post.Post
+import scala.io.StdIn.readLine
 
 object Main {
   def main(args: Array[String]): Unit = {
@@ -12,8 +13,39 @@ object Main {
     }
     
     val postsBySubreddit = allPosts.groupBy(_._1)
-    postsBySubreddit.foreach { case (subreddit, posts) =>
-      printReport(subreddit, posts)
+
+    println("1. Leer post especifico")
+    println("2. Ver estadisticas")
+    val input = Menu.leerLinea(Some("extra"))
+    input match {
+      case Some(1) => 
+          Menu.mostrarSuscripciones(subscriptions)
+          val resultado =
+            for {
+              numSub  <- Menu.leerLinea(Some("sub"))
+              sub     <- Menu.elegir(subscriptions, numSub)
+              posts   <- postsBySubreddit.get(sub._1)
+              _        = Menu.mostrarPosts(posts)
+              numPost <- Menu.leerLinea(Some("post"))
+              post    <- Menu.elegir(posts, numPost)
+            } yield post
+
+          resultado match {
+            case Some(post) =>
+              println("\n---------------------------------------------------------------------\n")
+              println(Formatters.formatPost(post))
+              println("\n---------------------------------------------------------------------\n")
+
+            case None =>
+              println("Entrada inválida o selección incorrecta")
+          }
+      case Some(2) =>
+        postsBySubreddit.foreach { case (subreddit, posts) =>
+          printReport(subreddit, posts)
+        }
+      
+      case _ =>
+        println("Entrada invalida")
     }
   }
 
