@@ -1,8 +1,8 @@
 import scala.io.Source
 import org.json4s._
 import org.json4s.jackson.JsonMethods._
-import scala.util.Using
 
+import scala.util.{Try, Using}
 import Subscription.Subscription
 import Post.Post
 
@@ -59,17 +59,7 @@ object FileIO {
   }
 
   // Pure function to download JSON feed from a URL
-  def downloadFeed(url: String): String = {
-    try{
-      val source = Option(Source.fromURL(url))
-      source match {
-        case Some(b) => b.mkString //In case it returns a value, parse it
-        case None => "" //In case for some reason it doesn't, return empty string
-      }
-    }catch{
-      case e: Exception =>
-        println(s"Failed to fetch $url: ${e.getMessage}")
-        ""//In case there's an exception, print it return empty string.
-    }
+  def downloadFeed(url: String): Option[String] = {
+          Using(Source.fromURL(url)){source => source.mkString}.toOption
   }
 }
