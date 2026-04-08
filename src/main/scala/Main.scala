@@ -6,10 +6,11 @@ object Main {
   def main(args: Array[String]): Unit = {
     val subscriptions: List[Subscription] = FileIO.readSubscriptions("subscriptions.json")
     
-    val allPosts: List[Post] = subscriptions.flatMap { case (subredditName, url) =>
-      println(s"Fetching posts from: $subredditName")
-      val json = FileIO.downloadFeed(url)
-      FileIO.parsePosts(subredditName, json)
+    val allPosts: List[Post] = subscriptions.flatMap {
+      case (subredditName, url) =>
+        println(s"Fetching posts from: $subredditName")
+
+        FileIO.parsePosts(subredditName, FileIO.downloadFeed(url).getOrElse(List.empty.toString))
     }
     
     val postsBySubreddit = allPosts.groupBy(_._1)

@@ -12,25 +12,9 @@ object FileIO {
 
   // Pure function to read subscriptions from a JSON file
   def readSubscriptions(subscriptionsFile: String): List[Subscription] = {
-
-    try{
      Using(Source.fromFile(subscriptionsFile)){source => source.mkString}.map(text => parse(text).extract[List[Map[String,String]]].map{
-       sub => (sub("name"),sub("url"))
+       sub => (sub("name"),sub("url")) //God save me from having to debug this monster.
      }).getOrElse(List.empty[Subscription])
-
-    // parse the json file and convert its content into a list of hashmaps
-    //val json = parse(content)
-    //val jsonMap = json.extract[List[Map[String, String]]]
-    
-    // map it to a List[Subscription]
-    //jsonMap.map { sub =>
-    //  (sub("name"), sub("url"))
-    //}
-    //}catch{
-    //  case e : Exception =>
-    //    println(s"Error reading subscriptions from ${subscriptionsFile}: ${e.getMessage}")
-    //    List.empty
-    }
   }
   
   // Pure function to parse post of a subreddit
